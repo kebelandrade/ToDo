@@ -16,7 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'ToDoController@index')->name('todo.index');
 
-Route::get('/complete', 'ToDoController@complete')->name('todo.complete');
+Route::get('/complete', 'ToDoController@show')->name('todo.complete');
 
 Route::post('/', 'ToDoController@store')->name('todo.store');
+
+Route::put('/{todo}', 'ToDoController@update')->name('todo.update');
+
+Route::delete('/{todo}', 'ToDoController@destroy')->name('todo.destroy');
 

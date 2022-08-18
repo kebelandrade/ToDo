@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\ToDo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class ToDoController extends Controller
@@ -18,7 +19,7 @@ class ToDoController extends Controller
 
 
        return Inertia::render('ToDo/Index', [
-           'tareas' => ToDo::get(['id', 'todo', 'complete'])
+           'tareas' => ToDo::where('complete', 0)->get(['id', 'todo', 'complete'])
 
        ]);
     }
@@ -31,7 +32,7 @@ class ToDoController extends Controller
     public function complete()
     {
         return Inertia::render('ToDo/Complete', [
-            'tareas' => ToDo::get(['id', 'todo', 'complete'])
+            'tareas' => ToDo::where('complete', 0)->get(['id', 'todo', 'complete'])
 
         ]);
     }
@@ -63,11 +64,12 @@ class ToDoController extends Controller
 
         $tareas->todo = $datos['nombre'];
         $tareas->complete = $datos['completado'];
+        $tareas->indice = $datos['indice'];
         $tareas->save();
 
 
         return Inertia::render('ToDo/Index', [
-            'tareas' => ToDo::get(['id', 'todo', 'complete'])
+            'tareas' => ToDo::where('complete', 0)->get(['id', 'todo', 'complete'])
         ]);
 
     }
@@ -76,11 +78,16 @@ class ToDoController extends Controller
      * Display the specified resource.
      *
      * @param  \App\ToDo  $toDo
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
-    public function show(ToDo $toDo)
+    public function show()
     {
         //
+
+        return Inertia::render('ToDo/Complete', [
+            'tareasCompletadas' => ToDo::where('complete', 1)->get(['id', 'todo', 'complete'])
+        ]);
+
     }
 
     /**
@@ -99,11 +106,21 @@ class ToDoController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\ToDo  $toDo
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
     public function update(Request $request, ToDo $toDo)
     {
         //
+
+        DB::table('to_dos')
+            ->where('id', $request['id'])
+            ->update(['complete' => $request['completado']]);
+
+
+        return Inertia::render('ToDo/Index', [
+            'tareas' => ToDo::where('complete', 0)->get(['id', 'todo', 'complete'])
+        ]);
+
     }
 
     /**

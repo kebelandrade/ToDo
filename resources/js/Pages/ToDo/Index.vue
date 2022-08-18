@@ -62,6 +62,7 @@
                             <td>
                                 <v-checkbox
                                     v-model="t.completado"
+                                    v-on:click="completado(t.id, t.completado)"
                                 ></v-checkbox>
                             </td>
                         </tr>
@@ -80,7 +81,7 @@
                     </v-btn>
 
                     <v-btn color="primary" dark class="mb-2"
-                           link @click="eliminar()">
+                           link @click="eliminarTodo()">
                         Eliminar Todo
                     </v-btn>
 
@@ -101,7 +102,7 @@ export default {
     layout: (h, page) => h(Layout, [page]),
 
     props: {
-      tareas: Array
+        tareas: Array
     },
 
     metaInfo: {
@@ -112,7 +113,8 @@ export default {
 
 
         tarea: '',
-        selection: []
+        selection: [],
+        tareasCompletadas: {}
 
 
     }),
@@ -120,7 +122,7 @@ export default {
     methods: {
 
         // Este método sirve para añadir los items a un objeto
-        agregar(){
+        agregar() {
 
             // Creamos un arreglo para poder añadir los items más especifico que deseamos
             let tarea = {}
@@ -136,46 +138,72 @@ export default {
                 tarea.indice = this.selection.length
             }
 
-            // Aquí añadimos el arreglo al objeto
-            this.selection.push(tarea)
-
             // Dejamos en blanco el input para añadir otro item
             this.tarea = ''
 
+            // Aquí mandamos los datos al controller para que guarde el item
             this.$inertia.post(this.route('todo.store'), tarea)
 
         },
 
         // Esta función es para hacer selección del item que queremos eliminar
-        seleccionado(nombre, indice){
+        seleccionado(nombre, indice) {
 
-              //Aquí realizamos un foreach del objeto selection que contiene los items agregado
-                this.selection.forEach(t => {
+            //Aquí realizamos un foreach del objeto selection que contiene los items agregado
+            this.tareas.forEach(t => {
 
-                    // Aquí comprobamos si es el item que seleccionamos para añadir un indicador
-                    if (t.indice === indice){
+                // Aquí comprobamos si es el item que seleccionamos para añadir un indicador
+                if (t.indice === indice) {
 
-                        // Verificamos si el checkbox fue seleccionado
-                        if (t.seleccionado === true){
+                    // Verificamos si el checkbox fue seleccionado
+                    if (t.seleccionado === true) {
 
-                           // Añadimos este 1 para tomar referencia que está disponible para eliminarlo
-                           t.seleccionado = 1
+                        // Añadimos este 1 para tomar referencia que está disponible para eliminarlo
+                        t.seleccionado = 1
 
-                        } else if (t.seleccionado === false){
+                    } else if (t.seleccionado === false) {
 
-                            // El 0 para tomar en cuenta que no está disponible para eliminarlo
-                            t.seleccionado = 0
-                        }
+                        // El 0 para tomar en cuenta que no está disponible para eliminarlo
+                        t.seleccionado = 0
                     }
-                })
+                }
+            })
+        },
 
-            }
+        completado(id, completado) {
+
+            this.tareasCompletadas = {}
+
+            this.tareasCompletadas.id = id
+            this.tareasCompletadas.completado = 1
+
+            // this.selection.push(this.tareasCompletadas)
+
+
+        },
+
+        actualizar() {
+
+            this.$inertia.put(this.route('todo.update', this.tareasCompletadas.id), this.tareasCompletadas)
+
+        },
+
+
+        eliminar() {
+
+
+
+        },
+
+
+        eliminarTodo() {
+
+
+        },
 
     }
 
 }
-
-
 
 
 </script>

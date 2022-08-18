@@ -15,7 +15,12 @@ class ToDoController extends Controller
      */
     public function index()
     {
-       return Inertia::render('ToDo/Index');
+
+
+       return Inertia::render('ToDo/Index', [
+           'tareas' => ToDo::get(['id', 'todo', 'complete'])
+
+       ]);
     }
 
     /**
@@ -25,7 +30,10 @@ class ToDoController extends Controller
      */
     public function complete()
     {
-        return Inertia::render('ToDo/Complete');
+        return Inertia::render('ToDo/Complete', [
+            'tareas' => ToDo::get(['id', 'todo', 'complete'])
+
+        ]);
     }
 
     /**
@@ -42,11 +50,26 @@ class ToDoController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
     public function store(Request $request)
     {
         //
+
+        $datos = $request;
+        //dd($request);
+
+        $tareas = new ToDo();
+
+        $tareas->todo = $datos['nombre'];
+        $tareas->complete = $datos['completado'];
+        $tareas->save();
+
+
+        return Inertia::render('ToDo/Index', [
+            'tareas' => ToDo::get(['id', 'todo', 'complete'])
+        ]);
+
     }
 
     /**

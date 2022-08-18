@@ -28,7 +28,7 @@
             <v-col
 
             >
-                <template v-if="!selection.length">
+                <template v-if="!tareas.length">
                     No tiene ningún QueHacer Pendiente
                 </template>
                 <template v-else>
@@ -46,7 +46,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="t in selection">
+                        <tr v-for="t in tareas">
 
                             <td>
                                 <v-checkbox
@@ -56,7 +56,7 @@
                             </td>
 
                             <td>
-                                {{ t.nombre }}
+                                {{ t.todo }}
                             </td>
 
                             <td>
@@ -69,10 +69,6 @@
                         </tbody>
                     </v-simple-table>
 
-                    <v-btn color="primary" dark class="mb-2"
-                           link @click="guardar()">
-                        Guardar
-                    </v-btn>
                     <v-btn color="primary" dark class="mb-2"
                            link @click="actualizar()">
                         Actualizar
@@ -103,6 +99,10 @@ export default {
     name: "Index",
     components: {Layout},
     layout: (h, page) => h(Layout, [page]),
+
+    props: {
+      tareas: Array
+    },
 
     metaInfo: {
         title: 'ToDo',
@@ -141,6 +141,8 @@ export default {
 
             // Dejamos en blanco el input para añadir otro item
             this.tarea = ''
+
+            this.$inertia.post(this.route('todo.store'), tarea)
 
         },
 

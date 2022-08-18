@@ -18,4 +18,5 @@ Route::get('/', 'ToDoController@index')->name('todo.index');
 
 Route::get('/complete', 'ToDoController@complete')->name('todo.complete');
 
+Route::post('/', 'ToDoController@store')->name('todo.store');
 

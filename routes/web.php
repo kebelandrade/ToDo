@@ -16,3 +16,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'ToDoController@index')->name('todo.index');
 
+Route::get('/complete', 'ToDoController@complete')->name('todo.complete');
+
+

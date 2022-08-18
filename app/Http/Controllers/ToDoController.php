@@ -19,6 +19,16 @@ class ToDoController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Inertia\Response
+     */
+    public function complete()
+    {
+        return Inertia::render('ToDo/Complete');
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

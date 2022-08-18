@@ -10,21 +10,19 @@
 
                 <v-list-item-group v-model="group" active-class="primary--text text--accent-4">
 
-
                     <v-list-item-content>
                         <v-list-item link @click="$inertia.visit(route('todo.index'))" >
                             <v-list-item-icon>
-                                <v-icon>mdi-text-box-plus</v-icon>
+                                <v-icon>mdi-text-box</v-icon>
                             </v-list-item-icon>
                             <v-list-item-content>
-                                <v-list-item-title>Agregar una nueva Tarea</v-list-item-title>
+                                <v-list-item-title>Inicio</v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
                     </v-list-item-content>
 
-
                     <v-list-item-content>
-                        <v-list-item link @click="$inertia.visit(route('todo.index'))" >
+                        <v-list-item link @click="$inertia.visit(route('todo.complete'))" >
                             <v-list-item-icon>
                                 <v-icon>mdi-text-box-check</v-icon>
                             </v-list-item-icon>

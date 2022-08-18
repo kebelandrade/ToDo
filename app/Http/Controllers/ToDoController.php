@@ -19,7 +19,7 @@ class ToDoController extends Controller
 
 
        return Inertia::render('ToDo/Index', [
-           'tareas' => ToDo::where('complete', 0)->get(['id', 'todo', 'complete'])
+           'tareas' => ToDo::get(['id', 'todo', 'complete'])
 
        ]);
     }
@@ -32,7 +32,7 @@ class ToDoController extends Controller
     public function complete()
     {
         return Inertia::render('ToDo/Complete', [
-            'tareas' => ToDo::where('complete', 0)->get(['id', 'todo', 'complete'])
+            'tareas' => ToDo::get(['id', 'todo', 'complete'])
 
         ]);
     }
@@ -64,12 +64,11 @@ class ToDoController extends Controller
 
         $tareas->todo = $datos['nombre'];
         $tareas->complete = $datos['completado'];
-        $tareas->indice = $datos['indice'];
         $tareas->save();
 
 
         return Inertia::render('ToDo/Index', [
-            'tareas' => ToDo::where('complete', 0)->get(['id', 'todo', 'complete'])
+            'tareas' => ToDo::get(['id', 'todo', 'complete'])
         ]);
 
     }
@@ -118,7 +117,7 @@ class ToDoController extends Controller
 
 
         return Inertia::render('ToDo/Index', [
-            'tareas' => ToDo::where('complete', 0)->get(['id', 'todo', 'complete'])
+            'tareas' => ToDo::get(['id', 'todo', 'complete'])
         ]);
 
     }
@@ -129,8 +128,56 @@ class ToDoController extends Controller
      * @param  \App\ToDo  $toDo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ToDo $toDo)
+    public function destroy(Request $request)
     {
-        //
+        $datos = $request;
+
+
+
     }
+
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\ToDo  $toDo
+     * @return \Inertia\Response
+     */
+    public function select(Request $request)
+    {
+        $datos = $request;
+
+
+
+            DB::table('to_dos')
+                ->where('complete', 1)
+                ->delete();
+
+
+        return Inertia::render('ToDo/Index', [
+            'tareas' => ToDo::get(['id', 'todo', 'complete'])
+        ]);
+
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\ToDo  $toDo
+     * @return \Inertia\Response
+     */
+    public function all(Request $request)
+    {
+        $datos = $request;
+
+        DB::table('to_dos')
+            ->where('complete', 0)
+            ->delete();
+
+        return Inertia::render('ToDo/Index', [
+            'tareas' => ToDo::get(['id', 'todo', 'complete'])
+        ]);
+
+    }
+
 }

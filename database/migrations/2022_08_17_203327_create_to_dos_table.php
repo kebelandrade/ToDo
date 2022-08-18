@@ -17,7 +17,6 @@ class CreateToDosTable extends Migration
             $table->id();
             $table->string('todo', '50');
             $table->boolean('complete')->default(false);
-            $table->integer('indice');
             $table->timestamps();
         });
     }

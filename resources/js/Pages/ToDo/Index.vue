@@ -38,7 +38,6 @@
                     >
                         <thead>
                         <tr>
-                            <th></th>
                             <th>Tarea</th>
                             <th>Completado</th>
                             <th></th>
@@ -48,12 +47,6 @@
                         <tbody>
                         <tr v-for="t in tareas">
 
-                            <td>
-                                <v-checkbox
-                                    v-model="t.seleccionado"
-                                    v-on:click="seleccionado(t.nombre, t.indice)"
-                                ></v-checkbox>
-                            </td>
 
                             <td>
                                 {{ t.todo }}
@@ -61,8 +54,9 @@
 
                             <td>
                                 <v-checkbox
-                                    v-model="t.completado"
-                                    v-on:click="completado(t.id, t.completado)"
+                                    v-model="t.complete"
+
+                                    v-on:click="completado(t.id, t.complete)"
                                 ></v-checkbox>
                             </td>
                         </tr>
@@ -114,7 +108,8 @@ export default {
 
         tarea: '',
         selection: [],
-        tareasCompletadas: {}
+        tareasCompletadas: {},
+        tareasSeleccionada: {}
 
 
     }),
@@ -131,12 +126,6 @@ export default {
             tarea.seleccionado = 0
             tarea.completado = false
 
-            // Aquí indicamos que el índice nos servirá para referencia del item para la eliminación
-            if (!this.selection.length) {
-                tarea.indice = 0
-            } else {
-                tarea.indice = this.selection.length
-            }
 
             // Dejamos en blanco el input para añadir otro item
             this.tarea = ''
@@ -146,58 +135,36 @@ export default {
 
         },
 
-        // Esta función es para hacer selección del item que queremos eliminar
-        seleccionado(nombre, indice) {
 
-            //Aquí realizamos un foreach del objeto selection que contiene los items agregado
-            this.tareas.forEach(t => {
-
-                // Aquí comprobamos si es el item que seleccionamos para añadir un indicador
-                if (t.indice === indice) {
-
-                    // Verificamos si el checkbox fue seleccionado
-                    if (t.seleccionado === true) {
-
-                        // Añadimos este 1 para tomar referencia que está disponible para eliminarlo
-                        t.seleccionado = 1
-
-                    } else if (t.seleccionado === false) {
-
-                        // El 0 para tomar en cuenta que no está disponible para eliminarlo
-                        t.seleccionado = 0
-                    }
-                }
-            })
-        },
-
-        completado(id, completado) {
+        completado(id, complete) {
 
             this.tareasCompletadas = {}
 
             this.tareasCompletadas.id = id
             this.tareasCompletadas.completado = 1
 
-            // this.selection.push(this.tareasCompletadas)
-
 
         },
 
         actualizar() {
 
-            this.$inertia.put(this.route('todo.update', this.tareasCompletadas.id), this.tareasCompletadas)
+            this.$inertia.put(this.route('todo.update', this.tareasCompletadas.id), this.tareasCompletadas,
+                {onSuccess: () => alert('Actualizado!')
+            })
 
         },
 
 
         eliminar() {
 
-
+            this.$inertia.post(this.route('todo.select'), this.tareas)
 
         },
 
 
         eliminarTodo() {
 
+            this.$inertia.delete(this.route('todo.all'), this.tareas)
 
         },
 
